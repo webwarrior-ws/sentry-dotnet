@@ -376,14 +376,14 @@ public class TransactionTracer : ITransactionTracer
     }
 
     /// <inheritdoc />
-    public void Finish(Exception exception, SpanStatus status)
+    public void Finish(IException exception, SpanStatus status)
     {
         _hub.BindException(exception, this);
         Finish(status);
     }
 
     /// <inheritdoc />
-    public void Finish(Exception exception) =>
+    public void Finish(IException exception) =>
         Finish(exception, SpanStatusConverter.FromException(exception));
 
     /// <inheritdoc />

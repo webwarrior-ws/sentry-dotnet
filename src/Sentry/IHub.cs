@@ -32,7 +32,7 @@ public interface IHub :
     /// <remarks>
     /// This method is used internally and is not meant for public use.
     /// </remarks>
-    void BindException(Exception exception, ISpan span);
+    void BindException(IException exception, ISpan span);
 
     /// <summary>
     /// Gets the currently ongoing (not finished) span or <code>null</code> if none available.

@@ -51,11 +51,11 @@ internal class NoOpSpan : ISpan
     {
     }
 
-    public void Finish(Exception exception, SpanStatus status)
+    public void Finish(IException exception, SpanStatus status)
     {
     }
 
-    public void Finish(Exception exception)
+    public void Finish(IException exception)
     {
     }
 

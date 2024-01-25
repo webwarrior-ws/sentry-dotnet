@@ -92,7 +92,7 @@ public abstract class SentryMessageHandler : DelegatingHandler
         }
         catch (Exception ex)
         {
-            span?.Finish(ex);
+            span?.Finish(new ExceptionWrapper(ex));
             throw;
         }
     }
@@ -114,7 +114,7 @@ public abstract class SentryMessageHandler : DelegatingHandler
         }
         catch (Exception ex)
         {
-            span?.Finish(ex);
+            span?.Finish(new ExceptionWrapper(ex));
             throw;
         }
     }

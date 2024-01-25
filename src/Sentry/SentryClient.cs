@@ -373,7 +373,7 @@ public class SentryClient : ISentryClient, IDisposable
         return CaptureEnvelope(envelope) ? processedEvent.EventId : SentryId.Empty;
     }
 
-    private IReadOnlyCollection<Exception>? ApplyExceptionFilters(Exception? exception)
+    private IReadOnlyCollection<IException>? ApplyExceptionFilters(IException? exception)
     {
         var filters = _options.ExceptionFilters;
         if (exception == null || filters == null || filters.Count == 0)
@@ -392,10 +392,10 @@ public class SentryClient : ISentryClient, IDisposable
         {
             // Flatten the tree of aggregates such that all the inner exceptions are non-aggregates.
             var innerExceptions = aggregate.Flatten().InnerExceptions;
-            if (innerExceptions.All(e => ApplyExceptionFilters(e) != null))
+            if (innerExceptions.All(e => ApplyExceptionFilters(new ExceptionWrapper(e)) != null))
             {
                 // All inner exceptions matched a filter, so the event should be filtered.
-                return innerExceptions;
+                return innerExceptions.Select(exn => new ExceptionWrapper(exn)).ToImmutableArray();
             }
         }
 

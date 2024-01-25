@@ -41,7 +41,7 @@ internal class SentryHttpFailedRequestHandler : SentryFailedRequestHandler
         {
             exception.SetSentryMechanism(MechanismType);
 
-            var @event = new SentryEvent(exception);
+            var @event = new SentryEvent(new ExceptionWrapper(exception));
             var hint = new Hint(HintTypes.HttpResponseMessage, response);
 
             var uri = response.RequestMessage?.RequestUri;

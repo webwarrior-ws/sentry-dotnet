@@ -10,7 +10,7 @@ public abstract class SentryEventExceptionProcessor<TException>
     where TException : Exception
 {
     /// <inheritdoc />
-    public void Process(Exception? exception, SentryEvent sentryEvent)
+    public void Process(IException? exception, SentryEvent sentryEvent)
     {
         if (exception is TException specificException)
         {

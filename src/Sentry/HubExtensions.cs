@@ -184,7 +184,7 @@ public static class HubExtensions
     }
 
     internal static SentryId CaptureExceptionInternal(this IHub hub, Exception ex) =>
-        hub.CaptureEvent(new SentryEvent(ex));
+        hub.CaptureEvent(new SentryEvent(new ExceptionWrapper(ex)));
 
     /// <summary>
     /// Captures the exception with a configurable scope callback.
@@ -193,7 +193,7 @@ public static class HubExtensions
     /// <param name="ex">The exception.</param>
     /// <param name="configureScope">The callback to configure the scope.</param>
     /// <returns>The Id of the event</returns>
-    public static SentryId CaptureException(this IHub hub, Exception ex, Action<Scope> configureScope) =>
+    public static SentryId CaptureException(this IHub hub, IException ex, Action<Scope> configureScope) =>
         hub.CaptureEvent(new SentryEvent(ex), configureScope);
 
     /// <summary>

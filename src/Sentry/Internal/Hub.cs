@@ -16,7 +16,7 @@ internal class Hub : IHub, IDisposable
     private int _isPersistedSessionRecovered;
 
     // Internal for testability
-    internal ConditionalWeakTable<Exception, ISpan> ExceptionToSpanMap { get; } = new();
+    internal ConditionalWeakTable<IException, ISpan> ExceptionToSpanMap { get; } = new();
 
     internal IInternalScopeManager ScopeManager { get; }
 
@@ -176,7 +176,7 @@ internal class Hub : IHub, IDisposable
         return transaction;
     }
 
-    public void BindException(Exception exception, ISpan span)
+    public void BindException(IException exception, ISpan span)
     {
         // Don't bind on sampled out spans
         if (span.IsSampled == false)

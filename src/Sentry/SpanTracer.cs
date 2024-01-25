@@ -146,14 +146,14 @@ public class SpanTracer : ISpan
     }
 
     /// <inheritdoc />
-    public void Finish(Exception exception, SpanStatus status)
+    public void Finish(IException exception, SpanStatus status)
     {
         _hub.BindException(exception, this);
         Finish(status);
     }
 
     /// <inheritdoc />
-    public void Finish(Exception exception) => Finish(exception, SpanStatusConverter.FromException(exception));
+    public void Finish(IException exception) => Finish(exception, SpanStatusConverter.FromException(exception));
 
     /// <inheritdoc />
     public SentryTraceHeader GetTraceHeader() => new(TraceId, SpanId, IsSampled);

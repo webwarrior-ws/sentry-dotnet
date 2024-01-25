@@ -43,12 +43,12 @@ public interface ISpan : ISpanData
     /// <summary>
     /// Finishes the span with the specified exception and status.
     /// </summary>
-    void Finish(Exception exception, SpanStatus status);
+    void Finish(IException exception, SpanStatus status);
 
     /// <summary>
     /// Finishes the span with the specified exception and automatically inferred status.
     /// </summary>
-    void Finish(Exception exception);
+    void Finish(IException exception);
 }
 
 /// <summary>

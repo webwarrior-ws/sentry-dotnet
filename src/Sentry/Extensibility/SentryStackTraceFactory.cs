@@ -19,7 +19,7 @@ public sealed class SentryStackTraceFactory : ISentryStackTraceFactory
     /// </summary>
     /// <param name="exception">The exception to create the stacktrace from.</param>
     /// <returns>A Sentry stack trace.</returns>
-    public SentryStackTrace? Create(Exception? exception = null)
+    public SentryStackTrace? Create(IException? exception = null)
     {
         if (exception == null && !_options.AttachStacktrace)
         {
@@ -30,7 +30,11 @@ public sealed class SentryStackTraceFactory : ISentryStackTraceFactory
         var isCurrentStackTrace = exception == null && _options.AttachStacktrace;
         _options.LogDebug("Creating SentryStackTrace. isCurrentStackTrace: {0}.", isCurrentStackTrace);
 
-        var stackTrace = exception is null ? new StackTrace(true) : new StackTrace(exception, true);
+        StackTrace stackTrace;
+        if (exception is ExceptionWrapper exnWrapper)
+            stackTrace = new StackTrace(exnWrapper.WrappedException, true);
+        else
+            stackTrace = new StackTrace(true);
         var result = DebugStackTrace.Create(_options, stackTrace, isCurrentStackTrace);
         _options.LogDebug("Created {0} with {1} frames.", nameof(DebugStackTrace), result.Frames.Count);
         return result.Frames.Count != 0 ? result : null;

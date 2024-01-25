@@ -53,7 +53,7 @@ public class DisabledHub : IHub, IDisposable
     /// <summary>
     /// No-Op.
     /// </summary>
-    public void BindException(Exception exception, ISpan span)
+    public void BindException(IException exception, ISpan span)
     {
     }
 

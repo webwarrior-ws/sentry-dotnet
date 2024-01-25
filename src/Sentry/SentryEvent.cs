@@ -21,7 +21,7 @@ public sealed class SentryEvent : IEventLike, IJsonSerializable
     /// The information from this exception is used by the Sentry SDK
     /// to add the relevant data to the event prior to sending to Sentry.
     /// </remarks>
-    public Exception? Exception { get; }
+    public IException? Exception { get; }
 
     /// <summary>
     /// The unique identifier of this event.
@@ -209,13 +209,13 @@ public sealed class SentryEvent : IEventLike, IJsonSerializable
     /// Creates a Sentry event with optional Exception details and default values like Id and Timestamp.
     /// </summary>
     /// <param name="exception">The exception.</param>
-    public SentryEvent(Exception? exception)
+    public SentryEvent(IException? exception)
         : this(exception, null)
     {
     }
 
     internal SentryEvent(
-        Exception? exception = null,
+        IException? exception = null,
         DateTimeOffset? timestamp = null,
         SentryId eventId = default)
     {
@@ -313,7 +313,7 @@ public sealed class SentryEvent : IEventLike, IJsonSerializable
 
         var debugMeta = json.GetPropertyOrNull("debug_meta")?.Pipe(DebugMeta.FromJson);
 
-        return new SentryEvent(exception, timestamp, eventId)
+        return new SentryEvent(exception == null ? null : new ExceptionWrapper(exception), timestamp, eventId)
         {
             _modules = modules?.WhereNotNullValue().ToDict(),
             Message = message,

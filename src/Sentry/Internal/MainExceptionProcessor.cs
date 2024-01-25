@@ -19,7 +19,7 @@ internal class MainExceptionProcessor : ISentryEventExceptionProcessor
         SentryStackTraceFactoryAccessor = sentryStackTraceFactoryAccessor;
     }
 
-    public void Process(Exception exception, SentryEvent sentryEvent)
+    public void Process(IException exception, SentryEvent sentryEvent)
     {
         _options.LogDebug("Running processor on exception: {0}", exception.Message);
 
@@ -32,7 +32,7 @@ internal class MainExceptionProcessor : ISentryEventExceptionProcessor
 
     // Sentry exceptions are sorted oldest to newest.
     // See https://develop.sentry.dev/sdk/event-payloads/exception
-    internal IReadOnlyList<SentryException> CreateSentryExceptions(Exception exception)
+    internal IReadOnlyList<SentryException> CreateSentryExceptions(IException exception)
     {
         var exceptions = WalkExceptions(exception).Reverse().ToList();
 
@@ -58,10 +58,10 @@ internal class MainExceptionProcessor : ISentryEventExceptionProcessor
         public int GetNextValue() => _value++;
     }
 
-    private IEnumerable<SentryException> WalkExceptions(Exception exception) =>
+    private IEnumerable<SentryException> WalkExceptions(IException exception) =>
         WalkExceptions(exception, new Counter(), null, null);
 
-    private IEnumerable<SentryException> WalkExceptions(Exception exception, Counter counter, int? parentId, string? source)
+    private IEnumerable<SentryException> WalkExceptions(IException exception, Counter counter, int? parentId, string? source)
     {
         var ex = exception;
         while (ex is not null)
@@ -74,7 +74,7 @@ internal class MainExceptionProcessor : ISentryEventExceptionProcessor
             {
                 for (var i = 0; i < aex.InnerExceptions.Count; i++)
                 {
-                    ex = aex.InnerExceptions[i];
+                    ex = new ExceptionWrapper(aex.InnerExceptions[i]);
                     source = $"{nameof(AggregateException.InnerExceptions)}[{i}]";
                     var sentryExceptions = WalkExceptions(ex, counter, id, source);
                     foreach (var sentryException in sentryExceptions)
@@ -86,7 +86,7 @@ internal class MainExceptionProcessor : ISentryEventExceptionProcessor
                 break;
             }
 
-            ex = ex.InnerException;
+            ex = ex.InnerException == null ? null : new ExceptionWrapper(ex.InnerException);
             parentId = id;
             source = nameof(AggregateException.InnerException);
         }
@@ -139,7 +139,7 @@ internal class MainExceptionProcessor : ISentryEventExceptionProcessor
         }
     }
 
-    private SentryException BuildSentryException(Exception exception, int id, int? parentId, string? source)
+    private SentryException BuildSentryException(IException exception, int id, int? parentId, string? source)
     {
         var sentryEx = new SentryException
         {
@@ -159,7 +159,7 @@ internal class MainExceptionProcessor : ISentryEventExceptionProcessor
         return sentryEx;
     }
 
-    private static Mechanism GetMechanism(Exception exception, int id, int? parentId, string? source)
+    private static Mechanism GetMechanism(IException exception, int id, int? parentId, string? source)
     {
         var mechanism = new Mechanism();
 

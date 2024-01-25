@@ -60,7 +60,7 @@ public enum SpanStatus
 // Can't add static methods to enums unfortunately
 internal static class SpanStatusConverter
 {
-    public static SpanStatus FromException(Exception exception) => exception switch
+    public static SpanStatus FromException(IException exception) => exception switch
     {
         TimeoutException => SpanStatus.DeadlineExceeded,
         InvalidCredentialException => SpanStatus.PermissionDenied,

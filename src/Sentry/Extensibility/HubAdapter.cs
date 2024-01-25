@@ -81,7 +81,7 @@ public sealed class HubAdapter : IHub
     /// Forwards the call to <see cref="SentrySdk"/>.
     /// </summary>
     [DebuggerStepThrough]
-    public void BindException(Exception exception, ISpan span) =>
+    public void BindException(IException exception, ISpan span) =>
         SentrySdk.BindException(exception, span);
 
     /// <summary>

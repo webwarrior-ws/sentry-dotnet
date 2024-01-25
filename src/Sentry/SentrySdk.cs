@@ -435,7 +435,7 @@ public static partial class SentrySdk
     /// <param name="configureScope">The callback to configure the scope.</param>
     /// <returns>The Id of the even.t</returns>
     [DebuggerStepThrough]
-    public static SentryId CaptureException(Exception exception, Action<Scope> configureScope)
+    public static SentryId CaptureException(IException exception, Action<Scope> configureScope)
         => CurrentHub.CaptureException(exception, configureScope);
 
     /// <summary>
@@ -566,7 +566,7 @@ public static partial class SentrySdk
     /// This method is used internally and is not meant for public use.
     /// </remarks>
     [DebuggerStepThrough]
-    public static void BindException(Exception exception, ISpan span)
+    public static void BindException(IException exception, ISpan span)
         => CurrentHub.BindException(exception, span);
 
     /// <summary>

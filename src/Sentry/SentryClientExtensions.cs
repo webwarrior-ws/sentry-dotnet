@@ -16,7 +16,7 @@ public static class SentryClientExtensions
     /// <param name="ex">The exception.</param>
     /// <returns>The Id of the event</returns>
     public static SentryId CaptureException(this ISentryClient client, Exception ex) =>
-        client.IsEnabled ? client.CaptureEvent(new SentryEvent(ex)) : SentryId.Empty;
+        client.IsEnabled ? client.CaptureEvent(new SentryEvent(new ExceptionWrapper(ex))) : SentryId.Empty;
 
     /// <summary>
     /// Captures a message.

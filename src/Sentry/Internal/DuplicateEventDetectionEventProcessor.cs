@@ -30,7 +30,7 @@ internal class DuplicateEventDetectionEventProcessor : ISentryEventProcessor
         return null;
     }
 
-    private bool IsDuplicate(Exception ex, SentryId eventId, bool debugLog)
+    private bool IsDuplicate(IException ex, SentryId eventId, bool debugLog)
     {
         if (_options.DeduplicateMode.HasFlag(DeduplicateMode.SameExceptionInstance))
         {
@@ -49,7 +49,7 @@ internal class DuplicateEventDetectionEventProcessor : ISentryEventProcessor
         if (_options.DeduplicateMode.HasFlag(DeduplicateMode.AggregateException)
             && ex is AggregateException aex)
         {
-            var result = aex.InnerExceptions.Any(e => IsDuplicate(e, eventId, false));
+            var result = aex.InnerExceptions.Any(e => IsDuplicate(new ExceptionWrapper(e), eventId, false));
             if (result)
             {
                 _options.LogDebug("Duplicate Exception: 'AggregateException'. Event {0} will be discarded.", eventId);
@@ -61,7 +61,7 @@ internal class DuplicateEventDetectionEventProcessor : ISentryEventProcessor
         if (_options.DeduplicateMode.HasFlag(DeduplicateMode.InnerException)
             && ex.InnerException != null)
         {
-            if (IsDuplicate(ex.InnerException, eventId, false))
+            if (IsDuplicate(new ExceptionWrapper(ex.InnerException), eventId, false))
             {
                 _options.LogDebug("Duplicate Exception: 'SameExceptionInstance'. Event {0} will be discarded.", eventId);
                 return true;
