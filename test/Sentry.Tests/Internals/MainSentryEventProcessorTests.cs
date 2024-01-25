@@ -479,7 +479,7 @@ public class MainSentryEventProcessorTests
     public void Process_AttachStacktraceTrueAndExistentThreadInEvent_AddsNewThread()
     {
         var expected = new SentryStackTrace();
-        _ = _fixture.SentryStackTraceFactory.Create(Arg.Any<Exception>()).Returns(expected);
+        _ = _fixture.SentryStackTraceFactory.Create(Arg.Any<IException>()).Returns(expected);
         _fixture.SentryOptions.AttachStacktrace = true;
         var sut = _fixture.GetSut();
 

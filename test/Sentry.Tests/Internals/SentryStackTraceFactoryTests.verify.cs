@@ -26,7 +26,7 @@ public partial class SentryStackTraceFactoryTests
         var factory = _fixture.GetSut();
 
         // Act
-        var stackTrace = factory.Create(exception);
+        var stackTrace = factory.Create(new ExceptionWrapper(exception));
 
         // Assert;
         var frame = stackTrace!.Frames.Single(x => x.Function!.Contains("GenericMethodThatThrows"));

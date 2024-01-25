@@ -6,7 +6,7 @@ public partial class SentryEventTests
     [Fact]
     public async Task SerializeObject_AllPropertiesSetToNonDefault_SerializesValidObject()
     {
-        var ex = new Exception("exception message");
+        var ex = new ExceptionWrapper(new Exception("exception message"));
         var timestamp = DateTimeOffset.MaxValue;
         var id = Guid.Parse("4b780f4c-ec03-42a7-8ef8-a41c9d5621f8");
         var sut = new SentryEvent(ex, timestamp, id)

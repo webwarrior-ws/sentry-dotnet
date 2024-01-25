@@ -124,13 +124,13 @@ public partial class SentryStackTraceFactoryTests
     {
         var sut = _fixture.GetSut();
 
-        Exception exception;
+        IException exception;
         try
         {
             Throw();
             void Throw() => throw null!;
         }
-        catch (Exception e) { exception = e; }
+        catch (Exception e) { exception = new ExceptionWrapper(e); }
 
         Assert.NotNull(sut.Create(exception));
     }
@@ -151,7 +151,7 @@ public partial class SentryStackTraceFactoryTests
         }
         catch (Exception e) { exception = e; }
 
-        var stackTrace = sut.Create(exception);
+        var stackTrace = sut.Create(new ExceptionWrapper(exception));
 
         Assert.Equal(new StackTrace(exception, true).FrameCount, stackTrace?.Frames.Count);
     }
@@ -177,7 +177,7 @@ public partial class SentryStackTraceFactoryTests
             exception = e;
         }
 
-        var stackTrace = sut.Create(exception);
+        var stackTrace = sut.Create(new ExceptionWrapper(exception));
 
         Assert.NotNull(stackTrace);
 
@@ -214,7 +214,7 @@ public partial class SentryStackTraceFactoryTests
         var factory = _fixture.GetSut();
 
         // Act
-        var stackTrace = factory.Create(exception);
+        var stackTrace = factory.Create(new ExceptionWrapper(exception));
 
         // Assert
         var frame = stackTrace!.Frames.Last();

@@ -552,7 +552,7 @@ public class SentrySdkTests : IDisposable
         });
 
         var scopeCallbackWasInvoked = false;
-        SentrySdk.CaptureException(new Exception(), _ => scopeCallbackWasInvoked = true);
+        SentrySdk.CaptureException(new ExceptionWrapper(new Exception()), _ => scopeCallbackWasInvoked = true);
 
         Assert.True(scopeCallbackWasInvoked);
     }

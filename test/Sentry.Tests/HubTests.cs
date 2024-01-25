@@ -114,7 +114,7 @@ public partial class HubTests
         // Arrange
         _fixture.Options.TracesSampleRate = 1.0;
         var hub = _fixture.GetSut();
-        var exception = new Exception("error");
+        var exception = new ExceptionWrapper(new Exception("error"));
 
         var transaction = hub.StartTransaction("foo", "bar");
         transaction.Finish(exception);
@@ -158,7 +158,7 @@ public partial class HubTests
         // Arrange
         _fixture.Options.TracesSampleRate = 1.0;
         var hub = _fixture.GetSut();
-        var exception = new Exception("error");
+        var exception = new ExceptionWrapper(new Exception("error"));
 
         var traceHeader = new SentryTraceHeader(
             SentryId.Parse("75302ac48a024bde9a3b3734a82e36c8"),

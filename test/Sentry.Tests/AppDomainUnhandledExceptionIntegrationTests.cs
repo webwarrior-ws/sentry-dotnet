@@ -61,7 +61,7 @@ public class AppDomainUnhandledExceptionIntegrationTests
         var exceptionProcessor = new MainExceptionProcessor(SentryOptions, () => stackTraceFactory);
         var @event = new SentryEvent(exception);
 
-        exceptionProcessor.Process(exception, @event);
+        exceptionProcessor.Process(new ExceptionWrapper(exception), @event);
         Assert.NotNull(@event.SentryExceptions?.ToList().Single(p => p.Mechanism?.Handled == false));
     }
 

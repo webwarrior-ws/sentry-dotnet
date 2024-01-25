@@ -930,7 +930,7 @@ public class ScopeExtensionsTests
 
         sut.Sdk.AddPackage("nuget:Sentry.Extensions.Logging", "2.0.0-preview10");
 
-        var target = new SentryEvent(null);
+        var target = new SentryEvent();
 
         sut.Apply(target);
 
@@ -944,7 +944,7 @@ public class ScopeExtensionsTests
 
         sut.Sdk.AddPackage("nuget:Sentry.Extensions.Logging", "2.0.0-preview10");
 
-        var target = new SentryEvent(null);
+        var target = new SentryEvent();
         sut.Sdk.AddPackage("nuget:Sentry.AspNetCore", "1.0.0");
 
         sut.Apply(target);
@@ -956,7 +956,7 @@ public class ScopeExtensionsTests
     public void Apply_Sdk_SourceNone_TargetSingle_DoesNotModifyTarget()
     {
         var sut = _fixture.GetSut();
-        var target = new SentryEvent(null);
+        var target = new SentryEvent();
         target.Sdk.AddPackage("nuget:Sentry", "1.0");
         var expected = target.Sdk.Packages.Single();
 

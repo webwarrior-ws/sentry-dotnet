@@ -312,7 +312,7 @@ public partial class SentryClientTests
     public void CaptureEvent_ExceptionFilter_RecordsDiscard()
     {
         var filter = Substitute.For<IExceptionFilter>();
-        filter.Filter(Arg.Any<Exception>()).Returns(true);
+        filter.Filter(Arg.Any<IException>()).Returns(true);
 
         _fixture.SentryOptions.AddExceptionFilter(filter);
 
@@ -643,14 +643,14 @@ public partial class SentryClientTests
         var processingOrder = new List<string>();
 
         var exceptionFilter = Substitute.For<IExceptionFilter>();
-        exceptionFilter.Filter(Arg.Do<Exception>(_ =>
+        exceptionFilter.Filter(Arg.Do<IException>(_ =>
             processingOrder.Add("exceptionFilter")
             )).Returns(false);
         _fixture.SentryOptions.ExceptionFilters.Add(exceptionFilter);
 
         var exceptionProcessor = Substitute.For<ISentryEventExceptionProcessor>();
         exceptionProcessor
-            .When(x => x.Process(Arg.Any<Exception>(), Arg.Any<SentryEvent>()))
+            .When(x => x.Process(Arg.Any<IException>(), Arg.Any<SentryEvent>()))
             .Do(_ => processingOrder.Add("exceptionProcessor"));
         var scope = new Scope(_fixture.SentryOptions);
         scope.ExceptionProcessors.Add(exceptionProcessor);

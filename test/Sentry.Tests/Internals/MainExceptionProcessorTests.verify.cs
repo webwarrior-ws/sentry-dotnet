@@ -9,7 +9,7 @@ public partial class MainExceptionProcessorTests
         var sut = _fixture.GetSut();
         var aggregateException = BuildAggregateException();
 
-        var sentryException = sut.CreateSentryExceptions(aggregateException);
+        var sentryException = sut.CreateSentryExceptions(new ExceptionWrapper(aggregateException));
 
         return Verify(sentryException);
     }

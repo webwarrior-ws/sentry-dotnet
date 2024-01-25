@@ -623,7 +623,7 @@ public class EnvelopeTests
     public async Task Roundtrip_WithEvent_Success()
     {
         // Arrange
-        var ex = new Exception("exception message");
+        var ex = new ExceptionWrapper(new Exception("exception message"));
         var timestamp = DateTimeOffset.MaxValue;
         var id = Guid.Parse("4b780f4c-ec03-42a7-8ef8-a41c9d5621f8");
         var @event = new SentryEvent(ex, timestamp, id)

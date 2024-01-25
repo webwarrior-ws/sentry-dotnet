@@ -47,7 +47,7 @@ public partial class MainExceptionProcessorTests
     {
         var sut = _fixture.GetSut();
         var evt = new SentryEvent();
-        var exp = new Exception();
+        var exp = new ExceptionWrapper(new Exception());
 
         sut.Process(exp, evt);
 
@@ -59,7 +59,7 @@ public partial class MainExceptionProcessorTests
     {
         var sut = _fixture.GetSut();
         var evt = new SentryEvent();
-        var exp = new Exception();
+        var exp = new ExceptionWrapper(new Exception());
 
         exp.Data.Add(Mechanism.HandledKey, false);
 
@@ -73,7 +73,7 @@ public partial class MainExceptionProcessorTests
     {
         var sut = _fixture.GetSut();
         var evt = new SentryEvent();
-        var exp = new Exception();
+        var exp = new ExceptionWrapper(new Exception());
 
         exp.Data.Add(Mechanism.HandledKey, true);
 
@@ -103,7 +103,7 @@ public partial class MainExceptionProcessorTests
             Data = { [new object()] = new object() }
         };
 
-        var actual = sut.CreateSentryExceptions(ex).Single();
+        var actual = sut.CreateSentryExceptions(new ExceptionWrapper(ex)).Single();
 
         Assert.Null(actual.Mechanism);
     }
@@ -114,7 +114,7 @@ public partial class MainExceptionProcessorTests
         var sut = _fixture.GetSut();
         _fixture.SentryStackTraceFactory = _fixture.SentryOptions.SentryStackTraceFactory;
         var evt = new SentryEvent();
-        sut.Process(BuildAggregateException(), evt);
+        sut.Process(new ExceptionWrapper(BuildAggregateException()), evt);
 
         var last = evt.SentryExceptions!.Last();
 // TODO: Create integration test to test this behaviour when publishing AOT apps
@@ -160,7 +160,7 @@ public partial class MainExceptionProcessorTests
         //Act
         ex.AddSentryTag(expectedTag1.Key, expectedTag1.Value);
         ex.AddSentryTag(expectedTag2.Key, expectedTag2.Value);
-        sut.Process(ex, evt);
+        sut.Process(new ExceptionWrapper(ex), evt);
 
         //Assert
         Assert.Single(evt.Tags, expectedTag1);
@@ -188,7 +188,7 @@ public partial class MainExceptionProcessorTests
         ex.Data.Add($"{MainExceptionProcessor.ExceptionDataTagKey}{invalidTag2.Key}", invalidTag2.Value);
         ex.AddSentryTag(invalidTag3.Key, invalidTag3.Value);
 
-        sut.Process(ex, evt);
+        sut.Process(new ExceptionWrapper(ex), evt);
 
         //Assert
         Assert.Single(evt.Extra, expectedTag1);
@@ -219,7 +219,7 @@ public partial class MainExceptionProcessorTests
         //Act
         ex.AddSentryContext(expectedContext1.Key, expectedContext1.Value);
         ex.AddSentryContext(expectedContext2.Key, expectedContext2.Value);
-        sut.Process(ex, evt);
+        sut.Process(new ExceptionWrapper(ex), evt);
 
         //Assert
         Assert.Equal(evt.Contexts[expectedContext1.Key], expectedContext1.Value);
@@ -247,7 +247,7 @@ public partial class MainExceptionProcessorTests
         //Act
         ex.AddSentryContext(invalidContext.Key, invalidContext.Value);
         ex.AddSentryContext(invalidContext2.Key, invalidContext2.Value);
-        sut.Process(ex, evt);
+        sut.Process(new ExceptionWrapper(ex), evt);
 
         //Assert
         Assert.Single(evt.Extra, expectedContext);
@@ -271,14 +271,14 @@ public partial class MainExceptionProcessorTests
         //Act
         ex.Data.Add(invalidData1.Key, invalidData1.Value);
         ex.Data.Add(invalidData2.Key, invalidData2.Value);
-        sut.Process(ex, evt);
+        sut.Process(new ExceptionWrapper(ex), evt);
 
         //Assert
         Assert.Single(evt.Extra, expectedData);
         Assert.Single(evt.Extra, expectedData2);
     }
 
-    private Exception GetHandledException()
+    private IException GetHandledException()
     {
         try
         {
@@ -286,7 +286,7 @@ public partial class MainExceptionProcessorTests
         }
         catch (Exception exception)
         {
-            return exception;
+            return new ExceptionWrapper(exception);
         }
     }
 }

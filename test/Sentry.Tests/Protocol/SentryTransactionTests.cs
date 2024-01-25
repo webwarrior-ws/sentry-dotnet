@@ -460,7 +460,7 @@ public class SentryTransactionTests
         var options = new SentryOptions { Dsn = ValidDsn };
         var hub = new Hub(options, client);
 
-        var exception = new InvalidOperationException();
+        var exception = new ExceptionWrapper(new InvalidOperationException());
         var transaction = new TransactionTracer(hub, "my name", "my op");
 
         // Act

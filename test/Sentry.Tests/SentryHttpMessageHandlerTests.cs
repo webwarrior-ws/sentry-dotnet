@@ -171,7 +171,7 @@ public class SentryHttpMessageHandlerTests
         await Assert.ThrowsAsync<Exception>(() => client.GetAsync("https://localhost/"));
 
         // Assert
-        hub.Received(1).BindException(exception, Arg.Any<ISpan>()); // second argument is an implicitly created span
+        hub.Received(1).BindException(new ExceptionWrapper(exception), Arg.Any<ISpan>()); // second argument is an implicitly created span
     }
 
     [Fact]
@@ -453,7 +453,7 @@ public class SentryHttpMessageHandlerTests
         Assert.Throws<Exception>(() => client.Get("https://localhost/"));
 
         // Assert
-        hub.Received(1).BindException(exception, Arg.Any<ISpan>()); // second argument is an implicitly created span
+        hub.Received(1).BindException(new ExceptionWrapper(exception), Arg.Any<ISpan>()); // second argument is an implicitly created span
     }
 
     [Fact]
