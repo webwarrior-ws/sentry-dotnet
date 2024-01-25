@@ -422,8 +422,17 @@ public static partial class SentrySdk
     /// <param name="exception">The exception.</param>
     /// <returns>The Id of the even.t</returns>
     [DebuggerStepThrough]
-    public static SentryId CaptureException(Exception exception)
+    public static SentryId CaptureException(IException exception)
         => CurrentHub.CaptureException(exception);
+
+    /// <summary>
+    /// Captures the exception.
+    /// </summary>
+    /// <param name="exception">The exception.</param>
+    /// <returns>The Id of the even.t</returns>
+    [DebuggerStepThrough]
+    public static SentryId CaptureException(Exception exception)
+        => CurrentHub.CaptureException(new ExceptionWrapper(exception));
 
     /// <summary>
     /// Captures the exception with a configurable scope.

@@ -201,7 +201,7 @@ public sealed class SentryEvent : IEventLike, IJsonSerializable
     /// <summary>
     /// Creates a new instance of <see cref="T:Sentry.SentryEvent" />.
     /// </summary>
-    public SentryEvent() : this(null)
+    public SentryEvent() : this((IException?)null)
     {
     }
 
@@ -211,6 +211,15 @@ public sealed class SentryEvent : IEventLike, IJsonSerializable
     /// <param name="exception">The exception.</param>
     public SentryEvent(IException? exception)
         : this(exception, null)
+    {
+    }
+
+    /// <summary>
+    /// Creates a Sentry event with optional Exception details and default values like Id and Timestamp.
+    /// </summary>
+    /// <param name="exception">The exception.</param>
+    public SentryEvent(Exception? exception)
+        : this(exception == null ? null : new ExceptionWrapper(exception), null)
     {
     }
 
