@@ -33,7 +33,7 @@ public partial class SentryEventTests
     [Fact]
     public void Ctor_Exception_Stored()
     {
-        var e = new Exception();
+        var e = new ExceptionWrapper(new Exception());
         var evt = new SentryEvent(e);
         Assert.Same(e, evt.Exception);
     }

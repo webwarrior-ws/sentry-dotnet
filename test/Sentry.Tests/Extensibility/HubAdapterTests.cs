@@ -31,7 +31,7 @@ public class HubAdapterTests : IDisposable
     [Fact]
     public void CaptureException_MockInvoked()
     {
-        var expected = new Exception();
+        var expected = new ExceptionWrapper(new Exception());
         Hub.IsEnabled.Returns(true);
         HubAdapter.Instance.CaptureException(expected);
         Hub.Received(1).CaptureEvent(Arg.Is<SentryEvent>(s => s.Exception == expected));
