@@ -12,7 +12,7 @@ public abstract class SentryEventExceptionProcessor<TException>
     /// <inheritdoc />
     public void Process(IException? exception, SentryEvent sentryEvent)
     {
-        if (exception is TException specificException)
+        if (exception is ExceptionWrapper exceptionWrapper && exceptionWrapper.WrappedException is TException specificException)
         {
             ProcessException(specificException, sentryEvent);
         }

@@ -15,7 +15,7 @@ public sealed class SentryEvent : IEventLike, IJsonSerializable
     private IDictionary<string, string>? _modules;
 
     /// <summary>
-    /// The <see cref="System.Exception"/> used to create this event.
+    /// The <see cref="IException"/> used to create this event.
     /// </summary>
     /// <remarks>
     /// The information from this exception is used by the Sentry SDK
