@@ -215,10 +215,13 @@ namespace Sentry
     public interface IException
     {
         System.Collections.IDictionary Data { get; }
+        System.Collections.Generic.IReadOnlyCollection<System.Exception> FlattenedInnerExceptions { get; }
         string? HelpLink { get; }
         System.Exception? InnerException { get; }
+        bool IsAggregate { get; }
         string Message { get; }
         string? StackTrace { get; }
+        bool IsOfType(System.Type exceptionType);
     }
     public interface IHasExtra
     {
@@ -315,7 +318,9 @@ namespace Sentry
         void Finish();
         void Finish(Sentry.IException exception);
         void Finish(Sentry.SpanStatus status);
+        void Finish(System.Exception exception);
         void Finish(Sentry.IException exception, Sentry.SpanStatus status);
+        void Finish(System.Exception exception, Sentry.SpanStatus status);
         Sentry.ISpan StartChild(string operation);
     }
     public interface ISpanData : Sentry.IHasExtra, Sentry.IHasTags, Sentry.Protocol.ITraceContext
@@ -1042,7 +1047,9 @@ namespace Sentry
         public void Finish() { }
         public void Finish(Sentry.IException exception) { }
         public void Finish(Sentry.SpanStatus status) { }
+        public void Finish(System.Exception exception) { }
         public void Finish(Sentry.IException exception, Sentry.SpanStatus status) { }
+        public void Finish(System.Exception exception, Sentry.SpanStatus status) { }
         public Sentry.SentryTraceHeader GetTraceHeader() { }
         public void SetExtra(string key, object? value) { }
         public void SetMeasurement(string name, Sentry.Protocol.Measurement measurement) { }
@@ -1140,7 +1147,9 @@ namespace Sentry
         public void Finish() { }
         public void Finish(Sentry.IException exception) { }
         public void Finish(Sentry.SpanStatus status) { }
+        public void Finish(System.Exception exception) { }
         public void Finish(Sentry.IException exception, Sentry.SpanStatus status) { }
+        public void Finish(System.Exception exception, Sentry.SpanStatus status) { }
         public Sentry.ISpan? GetLastActiveSpan() { }
         public Sentry.SentryTraceHeader GetTraceHeader() { }
         public void SetExtra(string key, object? value) { }

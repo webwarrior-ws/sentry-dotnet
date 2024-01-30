@@ -388,10 +388,10 @@ public class SentryClient : ISentryClient, IDisposable
             return new[] { exception };
         }
 
-        if (exception is AggregateException aggregate)
+        if (exception.IsAggregate)
         {
             // Flatten the tree of aggregates such that all the inner exceptions are non-aggregates.
-            var innerExceptions = aggregate.Flatten().InnerExceptions;
+            var innerExceptions = exception.FlattenedInnerExceptions;
             if (innerExceptions.All(e => ApplyExceptionFilters(new ExceptionWrapper(e)) != null))
             {
                 // All inner exceptions matched a filter, so the event should be filtered.
