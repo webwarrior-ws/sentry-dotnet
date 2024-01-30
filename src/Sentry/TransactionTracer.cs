@@ -383,8 +383,22 @@ public class TransactionTracer : ITransactionTracer
     }
 
     /// <inheritdoc />
+    public void Finish(Exception exception, SpanStatus status)
+    {
+        _hub.BindException(new ExceptionWrapper(exception), this);
+        Finish(status);
+    }
+
+    /// <inheritdoc />
     public void Finish(IException exception) =>
         Finish(exception, SpanStatusConverter.FromException(exception));
+
+    /// <inheritdoc />
+    public void Finish(Exception exception)
+    {
+        var wrappedException = new ExceptionWrapper(exception);
+        Finish(wrappedException, SpanStatusConverter.FromException(wrappedException));
+    }
 
     /// <inheritdoc />
     public SentryTraceHeader GetTraceHeader() => new(TraceId, SpanId, IsSampled);

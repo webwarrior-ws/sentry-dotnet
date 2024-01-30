@@ -20,7 +20,7 @@ public partial class IntegrationsTests : AspNetSentrySdkTestFixture
         // Arrange
         SentryEvent exceptionEvent = null;
         var exceptionProcessor = Substitute.For<ISentryEventExceptionProcessor>();
-        exceptionProcessor.Process(Arg.Any<Exception>(), Arg.Do<SentryEvent>(
+        exceptionProcessor.Process(Arg.Any<IException>(), Arg.Do<SentryEvent>(
             evt => exceptionEvent = evt
             ));
         Configure = o =>
@@ -63,7 +63,7 @@ public partial class IntegrationsTests : AspNetSentrySdkTestFixture
         // Arrange
         SentryEvent exceptionEvent = null;
         var exceptionProcessor = Substitute.For<ISentryEventExceptionProcessor>();
-        exceptionProcessor.Process(Arg.Any<Exception>(), Arg.Do<SentryEvent>(
+        exceptionProcessor.Process(Arg.Any<IException>(), Arg.Do<SentryEvent>(
             evt => exceptionEvent = evt
         ));
         Configure = o =>

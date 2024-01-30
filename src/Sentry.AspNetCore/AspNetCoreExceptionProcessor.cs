@@ -5,7 +5,7 @@ namespace Sentry.AspNetCore;
 
 internal class AspNetCoreExceptionProcessor : ISentryEventExceptionProcessor
 {
-    public void Process(Exception exception, SentryEvent @event)
+    public void Process(IException exception, SentryEvent @event)
     {
         // Mark events collected from the exception handler middlewares via logging as unhandled
         if (@event.Logger is "Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware" or "Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware")

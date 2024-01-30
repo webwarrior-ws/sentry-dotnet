@@ -37,7 +37,7 @@ public class SqlListenerTests : IClassFixture<LocalDbFixture>
         {
             var transaction = hub.StartTransaction("my transaction", "my operation");
             hub.ConfigureScope(scope => scope.Transaction = transaction);
-            hub.CaptureException(new("my exception"));
+            hub.CaptureException(new Exception("my exception"));
 
             await using (var connection = await database.OpenNewConnection())
             {
@@ -197,7 +197,7 @@ public class SqlListenerTests : IClassFixture<LocalDbFixture>
         {
             var transaction = hub.StartTransaction("my transaction", "my operation");
             hub.ConfigureScope(scope => scope.Transaction = transaction);
-            hub.CaptureException(new("my exception"));
+            hub.CaptureException(new Exception("my exception"));
 
 #if NETCOREAPP
             await using (var connection = await database.OpenNewConnection())

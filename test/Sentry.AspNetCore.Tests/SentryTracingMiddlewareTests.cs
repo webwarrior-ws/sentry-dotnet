@@ -586,7 +586,7 @@ public class SentryTracingMiddlewareTests
         await client.GetAsync("/person/13");
 
         // Assert
-        Assert.True(hub.ExceptionToSpanMap.TryGetValue(exception, out var span));
+        Assert.True(hub.ExceptionToSpanMap.TryGetValue(new ExceptionWrapper(exception), out var span));
         Assert.Equal(SpanStatus.InternalError, span?.Status);
     }
 

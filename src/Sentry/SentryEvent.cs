@@ -234,6 +234,17 @@ public sealed class SentryEvent : IEventLike, IJsonSerializable
         Platform = Constants.Platform;
     }
 
+    internal SentryEvent(
+        Exception exception,
+        DateTimeOffset? timestamp = null,
+        SentryId eventId = default)
+    {
+        Exception = new ExceptionWrapper(exception);
+        Timestamp = timestamp ?? DateTimeOffset.UtcNow;
+        EventId = eventId != default ? eventId : SentryId.Create();
+        Platform = Constants.Platform;
+    }
+
     /// <inheritdoc />
     public void AddBreadcrumb(Breadcrumb breadcrumb) =>
         (_breadcrumbs ??= new List<Breadcrumb>()).Add(breadcrumb);

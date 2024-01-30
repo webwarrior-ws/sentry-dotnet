@@ -16,7 +16,7 @@ internal class ExceptionHandlerFeatureProcessor : ISentryEventExceptionProcessor
         _exceptionHandlerFeature = exceptionHandlerFeature;
     }
 
-    public void Process(Exception exception, SentryEvent sentryEvent)
+    public void Process(IException exception, SentryEvent sentryEvent)
     {
         // When exceptions get caught by the UseExceptionHandler feature we reset the TransactionName and Tags
         // to reflect the route values of the original route (not the global error handling route)

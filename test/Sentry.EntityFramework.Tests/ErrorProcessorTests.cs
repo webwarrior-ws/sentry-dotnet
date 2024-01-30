@@ -26,7 +26,7 @@ public class ErrorProcessorTests
 
             var processor = new DbEntityValidationExceptionProcessor();
             var evt = new SentryEvent();
-            processor.Process(e, evt);
+            processor.Process(new ExceptionWrapper(e), evt);
 
             Assert.True(evt.Extra.TryGetValue("EntityValidationErrors", out var errors));
             var entityValidationErrors = errors as Dictionary<string, List<string>>;

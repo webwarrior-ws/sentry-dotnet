@@ -40,7 +40,7 @@ public partial class IntegrationsTests
         _ = await HttpClient.GetAsync("/throw");
 
         Assert.Equal(2, exceptionProcessorsResolved.Count);
-        exceptionProcessorsResolved[0].Received(1).Process(Arg.Any<Exception>(), Arg.Any<SentryEvent>());
-        exceptionProcessorsResolved[1].Received(1).Process(Arg.Any<Exception>(), Arg.Any<SentryEvent>());
+        exceptionProcessorsResolved[0].Received(1).Process(Arg.Any<IException>(), Arg.Any<SentryEvent>());
+        exceptionProcessorsResolved[1].Received(1).Process(Arg.Any<IException>(), Arg.Any<SentryEvent>());
     }
 }
